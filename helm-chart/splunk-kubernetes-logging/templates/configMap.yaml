@@ -138,6 +138,14 @@ data:
 
   output.conf: |-
     <label @SPLUNK>
+      # filter to  remove empty lines
+      <filter tail.containers.**>
+        @type grep
+        <exclude>
+         key log
+         pattern ^$
+        </exclude>
+      </filter>
       # = filters for container logs =
       {{- range $name, $logDef := .Values.logs }}
       {{- if and $logDef.from.pod $logDef.multiline }}
@@ -207,7 +215,7 @@ data:
         hec_port {{ . }}
         {{- end }}
         hec_token "#{ENV['SPLUNK_HEC_TOKEN']}"
-        host "#{ENV['SPLUNK_HEC_HOST']}"
+        host "#{ENV['SPLUNK_HEC_HOST']}{{ "," }}{{ .Values.global.splunk.environment }}{{ "," }}{{ .Values.global.splunk.region }}"
         source_key source
         sourcetype_key sourcetype
         {{- if or .Values.splunk.hec.indexRouting .Values.global.splunk.hec.indexRouting }}

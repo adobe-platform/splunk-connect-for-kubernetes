@@ -86,11 +86,15 @@ else empty
 end;
 
 def set_namespace(value):
-if value == "default"
-then
-{{- $index := or .Values.splunk.hec.indexRoutingDefaultIndex .Values.global.splunk.hec.indexRoutingDefaultIndex | default "main" | quote}}
+if value == "preview"
+then "adobesign-preview-ue1"
+elif value == "stage"
+then "adobesign-stage-ue1"
+elif value == "prod"
+then "adobesign-prod-ue1"
+else
+{{- $index := or .Values.splunk.hec.indexName .Values.global.splunk.hec.indexName | default "main" | quote}}
 {{- printf " %s" $index -}}
-else value
 end;
 
 def extract_container_info:
