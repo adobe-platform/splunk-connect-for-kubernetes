@@ -5,7 +5,7 @@ metadata:
   name: splunk-kubernetes-metrics
   labels:
     app: splunk-kubernetes-metrics
-    version: 1.2.0
+    version: 1.4.0
 data:
   fluent.conf: |
     # system wide configurations
@@ -51,13 +51,14 @@ data:
         source ${record['node']}/${record['pod-name']}/${record['container-name']}
       </record>
     </filter>
+    # = custom filters specified by users =
     <match kube.**>
       @type splunk_hec
       data_type metric
       metric_name_key metric_name
       metric_value_key value
       protocol https
-      hec_host MY-SPLUNK-HOST
+      hec_host "MY-SPLUNK-HOST"
       hec_port 8088
       hec_token "#{ENV['SPLUNK_HEC_TOKEN']}"
       host "#{ENV['NODE_NAME']}"
@@ -65,7 +66,7 @@ data:
       insecure_ssl true
       <buffer>
         @type memory
-        chunk_limit_records 1e+06
+        chunk_limit_records 10000
         chunk_limit_size 100m
         flush_interval 5s
         flush_thread_count 1

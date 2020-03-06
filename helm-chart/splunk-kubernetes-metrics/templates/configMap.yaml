@@ -76,6 +76,17 @@ data:
         source ${record['node']}/${record['pod-name']}/${record['container-name']}
       </record>
     </filter>
+    # = custom filters specified by users =
+    {{- range $name, $filterDef := .Values.customFilters }}
+    {{- if and $filterDef.tag $filterDef.type }}
+    <filter {{ $filterDef.tag }}>
+      @type {{ $filterDef.type }}
+      {{- if $filterDef.body }}
+      {{ $filterDef.body }}
+      {{- end }}
+    </filter>
+    {{- end }}
+    {{- end }}
     <match kube.**>
       @type splunk_hec
       data_type metric
@@ -83,7 +94,7 @@ data:
       metric_value_key value
       protocol {{ or .Values.splunk.hec.protocol .Values.global.splunk.hec.protocol }}
       {{- with or .Values.splunk.hec.host .Values.global.splunk.hec.host }}
-      hec_host {{ . }}
+      hec_host {{ . | quote }}
       {{- end }}
       {{- with or .Values.splunk.hec.port .Values.global.splunk.hec.port }}
       hec_port {{ . }}
