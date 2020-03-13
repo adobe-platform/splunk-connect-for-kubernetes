@@ -9,6 +9,8 @@ metadata:
     heritage: {{ .Release.Service }}
     engine: fluentd
 spec:
+  updateStrategy:
+    type: RollingUpdate
   selector:
     matchLabels:
       name: {{ template "splunk-kubernetes-metrics.fullname" . }}
@@ -41,7 +43,7 @@ spec:
       {{- end }}
       containers:
       - name: splunk-fluentd-k8s-metrics
-        image: {{ .Values.image.name }}
+        image: {{ template "splunk-kubernetes-metrics.image" . }}
         imagePullPolicy: {{ .Values.image.pullPolicy }}
         env:
           - name: KUBERNETES_NODE_IP
@@ -72,3 +74,6 @@ spec:
       - name: secrets
         secret:
           secretName: {{ template "splunk-kubernetes-metrics.secret" . }}
+      {{- if .Values.priorityClassName }}
+      priorityClassName: {{ .Values.priorityClassName }}
+      {{- end }}
