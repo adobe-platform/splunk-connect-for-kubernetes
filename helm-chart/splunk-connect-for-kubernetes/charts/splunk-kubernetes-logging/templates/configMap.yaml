@@ -214,6 +214,14 @@ data:
       </match>
     </label>
     <label @SPLUNK>
+      # filter to  remove empty lines
+      <filter tail.containers.**>
+        @type grep
+        <exclude>
+         key log
+         pattern ^$
+        </exclude>
+      </filter>
       # Enrich log with k8s metadata
       <filter tail.containers.**>
         @type kubernetes_metadata
@@ -352,7 +360,7 @@ data:
         debug_http {{ . }}
         {{- end }}
         {{- end }}
-        host "#{ENV['K8S_NODE_NAME']}"
+        host "#{ENV['SPLUNK_HEC_HOST']}{{ "," }}{{ .Values.global.splunk.environment }}{{ "," }}{{ .Values.global.splunk.region }}"
         source_key source
         sourcetype_key sourcetype
         <fields>

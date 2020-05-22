@@ -58,4 +58,3 @@ spec:
       - name: secrets
         secret:
           secretName: splunk-kubernetes-metrics
-
