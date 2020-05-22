@@ -45,7 +45,7 @@ def check_events_from_splunk(index="circleci_events",
     '''
     send a search request to splunk and return the events from the result
     '''
-    logger.info("search query = " + str(query))
+    #logger.info("search query = " + str(query))
     events = _collect_events(query, start_time, end_time, url, user, password)
 
     return events
@@ -178,19 +178,19 @@ def _collect_metrics(start_time, end_time, url="", user="", password="", index="
         url)
 
     logger.debug('requesting: %s', api_url)
- 
+
     create_job = _requests_retry_session().get(
         api_url,
         auth=(user, password),
         verify=False
     )
-        
+
     _check_request_status(create_job)
 
     json_res = create_job.json()
 
     events = json_res['entry']
-    logger.info('events: %s', events)
+    #logger.info('events: %s', events)
 
     return events
 
@@ -243,7 +243,7 @@ def _get_events(job_id, url="", user="", password=""):
 
     event_job_json = event_job.json()
     events = event_job_json['results']
-    logger.info("Events from get_events method returned %s events",
+    logger.debug("Events from get_events method returned %s events",
                 len(events))
 
     return events
