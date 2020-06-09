@@ -342,10 +342,11 @@ data:
           @type memory
           chunk_limit_records 100000
           chunk_limit_size 200m
-          flush_interval 5s
-          flush_thread_count 1
+          flush_interval 2s
+          flush_thread_count 8
           overflow_action block
           retry_max_times 3
+          retry_forever true
           total_limit_size 600m
         </buffer>
         <format monitor_agent>
