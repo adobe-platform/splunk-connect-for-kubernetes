@@ -55,8 +55,8 @@ spec:
               key: splunk_hec_token
         resources:
           requests:
-            cpu: 500m
-            memory: 512Mi
+            cpu: 100m
+            memory: 200Mi
         volumeMounts:
         - name: varlog
           mountPath: "/var/log"
