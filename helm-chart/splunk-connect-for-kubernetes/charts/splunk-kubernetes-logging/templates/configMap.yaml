@@ -360,7 +360,7 @@ data:
         debug_http {{ . }}
         {{- end }}
         {{- end }}
-        host "#{ENV['NODE_NAME']}{{ "," }}{{ .Values.global.splunk.environment }}{{ "," }}{{ .Values.global.splunk.region }}"
+        host "#{ENV['K8S_NODE_NAME']}{{ "," }}{{ .Values.global.splunk.environment }}{{ "," }}{{ .Values.global.splunk.region }}"
         source_key source
         sourcetype_key sourcetype
         <fields>
